@@ -1,0 +1,16 @@
+{
+    "name": "lbmadesia/api-generator",
+    "description": "To create a api with all related files like controller, route etc with a simple restapi.",
+    "type": "package",
+    "license": "MIT",
+    "authors": [{
+        "name": "Lb Madesia",
+        "email": "lbmadesia@gmail.com"
+    }],
+    "autoload": {
+        "psr-4": {
+            "Lbmadesia\\ApiGenerator\\": "src/"
+        }
+    },
+    "require": {}
+}
