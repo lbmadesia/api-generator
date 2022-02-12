@@ -35,8 +35,9 @@ and you can get the title "Api Management" from package's translation file by us
 ```
 Link Api management with route 
 
+```
 {{ route('admin.apis.index') }}
-
+```
 
 
 # Contribute
