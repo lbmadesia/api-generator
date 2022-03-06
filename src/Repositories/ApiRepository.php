@@ -4,8 +4,8 @@ namespace Lbmadesia\ApiGenerator\Repositories;
 
 use Lbmadesia\ApiGenerator\Api;
 use App\Exceptions\GeneralException;
-use App\Repositories\BaseRepository;
-use App\Models\Permission\Permission;
+// use App\Repositories\BaseRepository;
+use Lbmadesia\Generator\BaseRepository;
 use Illuminate\Support\Str;
 
 /**
