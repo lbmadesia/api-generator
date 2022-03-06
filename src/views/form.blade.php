@@ -9,92 +9,57 @@
     </div>
     <!-- Module Name -->
    <div class="row my-3">
-        {{ Form::label('name', trans('generator::labels.Apis.form.name'), ['class' => 'col-lg-2 control-label text-right required']) }}
+        {{ Form::label('name', trans('api-generator::labels.apis.form.name'), ['class' => 'col-lg-2 control-label text-right required']) }}
 
         <div class="col-lg-10">
-            {{ Form::text('name', null, ['class' => 'form-control box-size', 'placeholder' => 'e.g., Blog', 'required' => 'required']) }}
+            {{ Form::text('name', null, ['class' => 'form-control box-size', 'placeholder' => 'e.g., user', 'required' => 'required']) }}
+            <span class="name_name" role="alert"></span>
         </div><!--col-lg-10-->
     </div>
 
+    <div class="row my-3">
+        {{ Form::label('operations', 'AUTH', ['class' => 'col-lg-2 control-label text-right','data-value'=>'false']) }}
+        <div class="col-lg-4">
+            <label class="control control--checkbox">
+                <!-- For Create Operation of CRUD -->
+                {{ Form::checkbox('auth', '1', false) }} &nbsp;Authendtication
+                <div class="control__indicator"></div>
+            </label>
+        </div>
+        {{ Form::label('folder', 'Add Folder', ['class' => 'col-lg-2 control-label text-right']) }}
+        <div class="col-lg-4">
+            {{ Form::text('folder', null, ['class' => 'form-control box-size', 'placeholder' => 'e.g., User']) }}
+
+        </div>
+     </div>
+
     <!-- Directory -->
    <div class="row my-3">
-        {{ Form::label('directory_name', trans('generator::labels.Apis.form.directory_name'), ['class' => 'col-lg-2 control-label text-right required']) }}
+        {{ Form::label('api_path', trans('api-generator::labels.apis.form.api_path'), ['class' => 'col-lg-2 control-label text-right required']) }}
 
         <div class="col-lg-10">
-            {{ Form::text('directory_name', null, ['class' => 'form-control box-size', 'placeholder' => 'e.g., Blog', 'required' => true]) }}
+            {{ Form::text('api_path', null, ['class' => 'form-control box-size', 'placeholder' => 'e.g., Api/V1/', 'required' => true]) }}
         </div><!--col-lg-10-->
     </div>
     <!-- End Directory -->
 
     <!-- Model Name -->
    <div class="row my-3">
-        {{ Form::label('model_name', trans('generator::labels.Apis.form.model_name'), ['class' => 'col-lg-2 control-label text-right required']) }}
+        {{ Form::label('model_class', trans('api-generator::labels.apis.form.model_class'), ['class' => 'col-lg-2 control-label text-right required']) }}
 
         <div class="col-lg-10">
-            {{ Form::text('model_name', null, ['class' => 'form-control box-size only-text', 'placeholder' => 'e.g., Blog', 'required' => true]) }}
+            {{ Form::text('model_class', null, ['class' => 'form-control box-size only-text', 'placeholder' => 'e.g., App\Models\User', 'required' => true]) }}
             <div class="model-messages"></div>
         </div>
     </div>
     <!-- End Model Name -->
-
-    <!-- Table Name -->
-   <div class="row my-3">
-        {{ Form::label('table_name', trans('generator::labels.Apis.form.table_name'), ['class' => 'col-lg-2 control-label text-right']) }}
-
-        <div class="col-lg-10">
-            {{ Form::text('table_name', null, ['class' => 'form-control box-size', 'placeholder' => 'e.g., Blog']) }}
-            <div class="table-messages"></div>
-        </div><!--col-lg-10-->
-    </div>
-    <!-- End Table Name -->
-
-    <!-- Crud Operations Create/Edit/Delete to be added to the field (Read operation is given by default)-->
-   <div class="row my-3">
-        {{ Form::label('operations', 'CRUD Operations', ['class' => 'col-lg-2 control-label text-right']) }}
-        <div class="col-lg-8">
-            <label class="control control--checkbox">
-                <!-- For Create Operation of CRUD -->
-                {{ Form::checkbox('model_create', '1', false) }}Create
-                <div class="control__indicator"></div>
-            </label>
-            <label class="control control--checkbox">
-                <!-- For Edit Operation of CRUD -->
-                {{ Form::checkbox('model_edit', '1', false) }}Edit
-                <div class="control__indicator"></div>
-            </label>
-            <label class="control control--checkbox">
-                <!-- For Delete Operation of CRUD -->
-                {{ Form::checkbox('model_delete', '1', false) }}Delete
-                <div class="control__indicator"></div>
-            </label>
-        </div>
-    </div>
-    <!-- End Crud Operations -->
     <div class="row my-3">
-        <div class="col-lg-2"></div>
-        <div class="col-lg-8 text-center">
-            <hr />
-            <h3 class="box-title"> Optional </h3>
-            <hr />
+        <label class="col-lg-2 control-label text-right">Crud Api Generated</label>
+        <div class="col-lg-10">
+            <textarea name="url" class="form-control box-size crud_api" contenteditable="true" rows=8 readonly="">
+            </textarea>
         </div>
-        <div class="col-lg-2"></div>
-    </div><!-- /.box-header -->
-    <!-- Events -->
-    <div class="events-div">
-        <div class="row my-3 event clearfix">
-            {{ Form::label('event[]', trans('generator::labels.Apis.form.event'), ['class' => 'col-lg-2 control-label text-right']) }}
-
-            <div class="col-lg-6">
-                {{ Form::text('event[]', null, ['class' => 'form-control box-size', 'placeholder' => trans('generator::labels.Apis.form.event'), 'style' => 'width:100%']) }}
-            </div><!--col-lg-10-->
-            <a href="#" class="btn btn-danger btn-md remove-field hidden">Remove Event</a>
-            <a href="#" class="btn btn-primary btn-md add-field">Add Event</a>
-        </div><!--form control-->
     </div>
-
-    <div class="el-messages">
-    </div>
-    <!-- End Events -->
 
     <!-- To Show the generated File -->
     <div class="box-body">
@@ -102,7 +67,7 @@
        <div class="row my-3">
             <label class="col-lg-2 control-label text-right">Files To Be Generated</label>
             <div class="col-lg-10">
-                <textarea class="form-control box-size files" contenteditable="true" rows=15 readonly="">
+                <textarea name="controller_path" class="form-control box-size files" contenteditable="true" rows=8 readonly="">
                 </textarea>
             </div>
         </div>
@@ -121,263 +86,112 @@
 </div>
 @section("bottom-scripts")
     {!! Html::script('backend/js/pluralize.js') !!}
-    <script type="text/javascript">
-        //When the DOM is ready to be manipulated
-        $(document).ready(function(){
-            model_ns = {!! json_encode($model_namespace) !!};
-            controller_ns = {!! json_encode($controller_namespace) !!};
-            event_ns = {!! json_encode($event_namespace) !!};
-            request_ns = {!! json_encode($request_namespace) !!};
-            repo_ns = {!! json_encode($repo_namespace) !!};
-            route_path = {!! json_encode($route_path) !!};
-            view_path = {!! json_encode($view_path) !!};
-
-            //If any errors occured
-            handleAllCheckboxes();
-            //events and listeners checkbox change event
-            $("input[name=el]").on('change', function(e){
-                handleCheckBox($(this), $(".el"));
-            });
-            //Add field in event panel
-            $(document).on('click', ".add-field", function(e){
-                e.preventDefault();
-                clone = $(".event").first().clone();
-                clone.find(".remove-field").removeClass('hidden');
-                clone.appendTo(".events-div");
-            });
-            //remove field in event panel
-            $(document).on('click', ".remove-field", function(e){
-                e.preventDefault();
-                $(this).parent('div').remove();
-            });
-            //model name on blur event
-            $(document).on('blur', "input[name=model_name]", function(e){
-                getFilesGenerated();
-                table = pluralize($(this).val());
-                $("input[name=table_name]").val(table.toLowerCase());
-            });
-            //Directory name blur event
-            $(document).on('blur', "input[name=directory_name]", function(e){
-                getFilesGenerated();
-            });
-            //Model Create Checkbox change event
-            $(document).on('change', "input[name=model_create]", function(e){
-                getFilesGenerated();
-            });
-            //Model Edit Checkbox change event
-            $(document).on('change', "input[name=model_edit]", function(e){
-                getFilesGenerated();
-            });
-            //Model Delete Checkbox change event
-            $(document).on('change', "input[name=model_delete]", function(e){
-                getFilesGenerated();
-            });
-            //table name on blur event
-            $(document).on('blur', "input[name=table_name]", function(e){
-                checkTableExists($(this));
-            });
-            //Events Change Event
-            $(document).on('change', "input[name='event[]']", function(e){
-                getFilesGenerated();
-            });
-        });
-
-        function checkModelExists(model) {
-            if(model.val()) {
-                path = getPath( model_ns, $("input[name=model_namespace]").val(), model.val());
-                checkPath(path, 'model');
-            } else {
-                throwMessages('error', 'Please provide some input.', "model");
-            }
+<script>
+ $( document ).ready(function() {
+    sessionStorage.removeItem("apiauth");
+    //  event on name tag
+     $("#name").on('input',function(){
+       let prefix = '/api/v1';
+       let apiname = $(this).val();
+        if(apiname.match(" ")){
+            apiname = apiname.replace(' ','');
+            $(this).val(apiname);
         }
-
-        function checkTableExists(table) {
-            if(table.val()){
-                $.post( "{{ route('admin.Apis.check.table') }}", { 'table' : table.val()} )
-                .done( function( data ) {
-                    throwMessages(data.type, data.message, "table");
-                });
-            } else {
-                 throwMessages('error', "Please provide some input.", "table");
-            }
+        apiname = apiname.toLowerCase();
+        var auth = sessionStorage.getItem("apiauth");
+        if(auth != 'auth'){
+            $("#api_path").val(prefix+"/"+apiname);
         }
-
-        function checkEventExists(event) {
-            if(event.val() && $("input[name=event_namespace]").val()) {
-                path = getPath( event_ns, $("input[name=event_namespace]").val(), event.val());
-                checkPath(path, 'el');
-            } else {
-                throwMessages('error', 'Please provide some input.', "el");
-            }
+        else{
+            $("#api_path").val(prefix+'/auth/'+apiname);
         }
-        function getPath(ns, namespace, model) {
-            if(dir = $("input[name=directory_name]").val()) {
-                return ns + namespace + "\\" + dir + "\\" + model;
-            } else {
-                return ns + namespace + "\\" +  model;
-            }
+        crudApi();
+     });
+    // event on auth
+     $("input[name='auth']").click(function(){
+       let prefix = '/api/v1';
+       let apiname = $("#name").val();
+       apiname = apiname.replace(' ','');
+       apiname = apiname.toLowerCase();
+        var auth = sessionStorage.getItem("apiauth");
+        if(auth == 'auth'){
+            sessionStorage.removeItem("apiauth");
+            $("#api_path").val(prefix+"/"+apiname);
         }
-
-        function checkPath(path, element) {
-            $.post( "{{ route('admin.Apis.check.namespace') }}", { 'path' : path} )
-            .done( function( data ) {
-                throwMessages(data.type, data.message, element);
-            });
+        else{
+            sessionStorage.setItem("apiauth",'auth');
+            $("#api_path").val(prefix+'/auth/'+apiname);
         }
+        crudApi();
+     });
 
-        function throwMessages(type, message, element) {
-            appendMessage = '';
-            switch(type) {
-                case 'warning' :
-                    appendMessage = "<span class='"+ element +"-warning'><i class='fa fa-exclamation-triangle' aria-hidden='true'></i>&nbsp; "+ message +"</span>";
-                    break;
-                case 'error' :
-                    appendMessage = "<span class='"+ element +"-error'><i class='fa fa-exclamation-circle' aria-hidden='true'></i>&nbsp; "+ message +"</span>";
-                    break;
-                case 'success' :
-                    appendMessage = "<span class='"+ element +"-success'><i class='fa fa-check' aria-hidden='true'></i>&nbsp; "+ message +"</span>";
-            }
+    //  start add folder
+    $("#folder").on('input',function(){
+            crudApi();
+    });
+    //  end add folder
+     function crudApi(){
+       var filetext = $(".files").val("");
+       var folderName = $("#folder").val();
+       var auth = sessionStorage.getItem("apiauth");
+       let apiname = $("#name").val();
+       apiname = apiname.replace(' ','');
+       apiname = apiname.charAt(0).toUpperCase() + apiname.slice(1).toLowerCase();
+       folderName = folderName.replace(' ','');
+       folderName = folderName.charAt(0).toUpperCase() + folderName.slice(1).toLowerCase();
+       if(folderName != '')
+            var controllerfile = 'App\\Http\\Controllers\\Api\\V1\\'+folderName+'\\'+apiname+'Controller.php';
+       else
+       var controllerfile = 'App\\Http\\Controllers\\Api\\V1\\'+apiname+'Controller.php';
 
-            $("."+element+"-messages").html(appendMessage);
+       $(".files").val(controllerfile);
+       crud_api();
+     }
 
-        }
-        function getFilesGenerated() {
-            model = $("input[name=model_name]").val();
-            if(model) {
-                separator = "" ;
-                if(dir = $("input[name=directory_name]").val()) {
-                    model_nspace = model_ns + dir;
-                    controller_nspace = controller_ns + dir;
-                    request_nspace = request_ns + dir;
-                    repo_nspace = repo_ns + dir;
-                    event_nspace = event_ns + dir;
-                    views_path = view_path + pluralize(dir.toLowerCase());
-                    separator = "\\";
-                }
-                else {
-                    model_nspace = model_ns;
-                    controller_nspace = controller_ns;
-                    request_nspace = request_ns;
-                    repo_nspace = repo_ns;
-                    event_nspace = event_ns;
-                    views_path = view_path;
-                }
-                list_nspace = event_nspace.replace("Events", "Listeners");
-                directory_separator = "\\";
-                files = [];
-                model_plural = pluralize(model);
-                files.push(model_nspace + separator + model + ".php\n");
-                files.push(model_nspace + separator + "Traits" + directory_separator + model_plural + "Attribute.php\n");
-                files.push(model_nspace + separator + "Traits" + directory_separator + model_plural + "Relationship.php\n");
-                files.push("\n" + controller_nspace + separator +model_plural + "Controller.php\n");
-                files.push(controller_nspace + separator +model_plural + "TableController.php\n");
-                create = $("input[name=model_create]").prop('checked');
-                edit = $("input[name=model_edit]").prop('checked');
-                del = $("input[name=model_delete]").prop('checked');
-                files.push("\n");
-                if(create) {
-                    files.push(request_nspace + separator + "Create" + model_plural + "Request.php\n");
-                    files.push(request_nspace + separator + "Store" + model_plural + "Request.php\n");
-                }
-                if(edit) {
-                    files.push(request_nspace + separator + "Edit" + model_plural + "Request.php\n");
-                    files.push(request_nspace + separator + "Update" + model_plural + "Request.php\n");
-                }
-                if(del) {
-                    files.push(request_nspace + separator + "Delete" + model_plural + "Request.php\n");
-                }
-                files.push("\n" + views_path + separator + "index.blade.php\n");
-                if(create) {
-                    files.push(views_path + separator + "create.blade.php\n");
-                }
-                if(edit) {
-                    files.push(views_path + separator + "edit.blade.php\n");
-                }
-                if(create || edit) {
-                    files.push(views_path + separator + "form.blade.php\n");
-                }
-                files.push("\n");
-                files.push(route_path + model + ".php\n");
-                files.push("\n");
-                files.push(repo_nspace + separator + model_plural + "Repository.php\n");
-                files.push("\n");
-                $(document).find('input[name="event[]"]').each(function(){
-                    if(e = $(this).val()) {
-                        files.push(event_nspace + separator + e + ".php\n");
-                        files.push(list_nspace + separator + e + "Listener.php\n");
-                    }
-                });
-                files = files.toString().replace (/,/g, "");
-                $(".files").val(files);
-            }
-        }
-        //If any errors occured,
-        //the panels should automatically be opened
-        //which were opened before
-        function handleAllCheckboxes() {
-            handleCheckBox($("input[name=model]"), $(".model"));
-            handleCheckBox($("input[name=controller]"), $(".controller"));
-            handleCheckBox($("input[name=table_controller]"), $(".table_controller"));
-            handleCheckBox($("input[name=table]"), $(".table"));
-            handleCheckBox($("input[name=route]"), $(".route"));
-            handleCheckBox($("input[name=views]"), $(".views"));
-            handleCheckBox($("input[name=el]"), $(".el"));
-            handleCheckBox($("input[name=repository]"), $(".repository"));
-            throwMessages('warning', 'The table name can only contain characters and digits and underscores[_].', 'table');
-            throwMessages('warning', 'The files with the same name would be overwritten.', 'views');
-        }
-
-        //Handle the checkbox event for that element
-        function handleCheckBox(checkbox, element){
-            checkboxValue = checkbox.prop('checked');
-            if($("."+checkbox.attr('name')+"-messages").children().length == 0) {
-                $("."+checkbox.attr('name')+"-messages").empty();
-            }
-            if(checkboxValue) {
-                element.removeClass('hidden', 3000);
-            }
-            else {
-                element.addClass('hidden', 3000);
-            }
-
-            //calling required field handler functions
-            switch (checkbox.attr('name')) {
-                case 'model' : handleModelRequiredFields(checkboxValue);
-                    break;
-                case 'controller' : handleControllerRequiredFields(checkboxValue);
-                    break;
-                case 'table' : handleTableRequiredFields(checkboxValue);
-                    break;
-                case 'route' : handleRouteRequiredFields(checkboxValue);
-                    break;
-                case 'repository' : handleRepoRequiredFields(checkboxValue);
-                    break;
-                case 'el' : handleEventRequiredFields(checkboxValue);
-                    break;
-            }
-        }
-
-        //Events Required fields if that panel is open
-        function handleEventRequiredFields(check) {
-            $("input[name=event_namespace]").attr('required', check);
-            $("input[name='event[]']").attr('required', check);
-        }
-        //For changing namespace
-        // function changeNamespace(val, ns, element) {
-        //     if(!val) {
-        //         val = ns.replace('/\\\\/g', '');
-        //     } else {
-        //         val = ns + "\\" + val + "\\";
-        //     }
-        //     element.text(val);
-        // }
-
+     function crud_api(){
+        var api_path = $("#api_path").val();
+        var data = api_path+" (GET)\n"+api_path+"/{id} (GET)\n"+api_path+" (POST)\n"+api_path+"/{id} (PUT)\n"+api_path+"/{id} (DELETE)\n";
+        $(".crud_api").val(data);
+     }
+ });
         //For only characters
-        $( document ).on('keyup', ".only-text", function(e) {
-            var val = $(this).val();
-            if (val.match(/[^a-zA-Z]/g)) {
-               $(this).val(val.replace(/[^a-zA-Z]/g, ''));
+        // $( document ).on('keyup', ".only-text", function(e) {
+        //     var val = $(this).val();
+        //     if (val.match(/[^a-zA-Z]/g)) {
+        //        $(this).val(val.replace(/[^a-zA-Z]/g, ''));
+        //     }
+        // });
+$("#name").on('change',function(){
+    var name = $('#name').val();
+        $.ajaxSetup({
+            headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-    </script>
+        $.ajax({
+            type : 'POST',
+            url : "{{route('admin.apis.check.route')}}",
+            cache : true,
+            data : {
+            name : name
+            },
+            beforeSend : function(){
+                $("#apisubmit").attr('disabled','disabled');
+                $(".name_name").html('please wait...');
+            },
+            success : function(res){
+                $(".name_name").html('<strong class="text-success">'+res.message+'</strong>');
+
+                $("#apisubmit").removeAttr('disabled');
+            },
+            error : function(xhr){
+                $("#apisubmit").attr('disabled','disabled');
+                $(".name_name").html('<strong class="text-danger">'+xhr.responseJSON.message+'</strong>');
+            }
+        });
+
+
+});
+
+</script>
 @endsection

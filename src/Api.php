@@ -8,5 +8,5 @@ class Api extends Model
 {
     protected $table = 'apis';
 
-    protected $fillable = ['view_permission_id', 'name', 'url', 'created_by', 'updated_by'];
+    protected $fillable = ['view_permission_id', 'name', 'url','controller_path', 'created_by', 'updated_by'];
 }

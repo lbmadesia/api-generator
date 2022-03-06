@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Permission\Permission;
 use Lbmadesia\ApiGenerator\Repositories\ApiRepository;
+use Lbmadesia\ApiGenerator\Api;
 
 /**
  * Class ModuleController.
@@ -36,7 +37,7 @@ class ApiController extends Controller
      */
     public function index(Request $request)
     {
-        return view('generator::index');
+        return view('api-generator::index');
     }
 
     /**
@@ -46,14 +47,8 @@ class ApiController extends Controller
      */
     public function create(Request $request)
     {
-        return view('generator::create')
-            ->with('model_namespace', $this->generator->getModelNamespace())
-            ->with('request_namespace', $this->generator->getRequestNamespace())
-            ->with('controller_namespace', $this->generator->getControllerNamespace())
-            ->with('event_namespace', $this->event_namespace)
-            ->with('repo_namespace', $this->generator->getRepoNamespace())
-            ->with('route_path', $this->generator->getRoutePath())
-            ->with('view_path', $this->generator->getViewPath());
+        return view('api-generator::create');
+
     }
 
     /**
@@ -66,148 +61,28 @@ class ApiController extends Controller
     public function store(Request $request)
     {
         $this->generator->initialize($request->all());
-        $this->generator->createMigration();
-        $this->generator->createModel();
-        $this->generator->createRequests();
-        $this->generator->createRepository();
         $this->generator->createController();
-        $this->generator->createTableController();
         $this->generator->createRouteFiles();
-        $this->generator->insertToLanguageFiles();
-        $this->generator->createViewFiles();
-        $this->generator->createEvents();
-
-        //Creating the Module
-        $this->repository->create($request->all(), $this->generator->getPermissions());
-
-        return redirect()->route('admin.modules.index')->withFlashSuccess('Module Generated Successfully!');
+        $this->repository->create($request->all());
+        return redirect()->route('admin.apis.index')->with('success','Api Generated Successfully!');
     }
 
-    /**
-     * Checking the path for a file if exists.
-     *
-     * @param Request $request
-     */
-    public function checkNamespace(Request $request)
-    {
-        if (isset($request->path)) {
-            $path = $this->parseModel($request->path);
-            $path = base_path(trim(str_replace('\\', '/', $request->path)), '\\');
-            $path = str_replace('App', 'app', $path);
-            if (file_exists($path.'.php')) {
-                return response()->json((object) [
-                    'type'    => 'error',
-                    'message' => 'File exists Already',
-                ]);
-            } else {
-                return response()->json((object) [
-                    'type'    => 'success',
-                    'message' => 'File can be generated at this location',
-                ]);
-            }
-        } else {
-            return response()->json((object) [
-                'type'    => 'error',
-                'message' => 'Please provide some value',
-            ]);
-        }
-    }
 
-    /**
-     * Checking if the table exists.
-     *
-     * @param Request $request
-     */
-    public function checkTable(Request $request)
+    public function apiRoute(Request $request)
     {
-        if ($request->table) {
-            if (Schema::hasTable($request->table)) {
-                return response()->json((object) [
+        $api = Api::where('name','=',$request->name)->first();
+        if ($api) {
+                return response([
                     'type'    => 'error',
-                    'message' => 'Table exists Already',
-                ]);
+                    'message' => 'route exists Already',
+                ],404)->header('Content-Type','application/json');
             } else {
-                return response()->json((object) [
+                return response( [
                     'type'    => 'success',
                     'message' => 'Table Name Available',
-                ]);
+                ],200)->header('Content-Type','application/json');
             }
-        } else {
-            return response()->json((object) [
-                'type'    => 'error',
-                'message' => 'Please provide some value',
-            ]);
-        }
     }
 
-    /**
-     * Checking if the table exists.
-     *
-     * @param Request $request
-     */
-    public function checkRoute(Request $request)
-    {
-        if ($request->table) {
-            if (Schema::hasTable($request->table)) {
-                return response()->json((object) [
-                    'type'    => 'error',
-                    'message' => 'Table exists Already',
-                ]);
-            } else {
-                return response()->json((object) [
-                    'type'    => 'success',
-                    'message' => 'Table Name Available',
-                ]);
-            }
-        } else {
-            return response()->json((object) [
-                'type'    => 'error',
-                'message' => 'Please provide some value',
-            ]);
-        }
-    }
 
-    /**
-     * Get the fully-qualified model class name.
-     *
-     * @param string $model
-     *
-     * @return string
-     */
-    public function parseModel($model)
-    {
-        if (preg_match('([^A-Za-z0-9_/\\\\])', $model)) {
-            throw new InvalidArgumentException('Name contains invalid characters.');
-        }
-
-        $model = trim(str_replace('/', '\\', $model), '\\');
-
-        return $model;
-    }
-
-    public function checkPermission(Request $request)
-    {
-        $permission = $request->permission;
-
-        if ($permission) {
-            $per = Permission::where('name', $permission)->first();
-
-            if ($per) {
-                return response()->json((object) [
-                    'type'    => 'success',
-                    'message' => 'Permission Exists',
-                ]);
-            } else {
-                return response()->json((object) [
-                    'type'    => 'error',
-                    'message' => 'Permission does not exists',
-                ]);
-            }
-        } else {
-            return response()->json((object) [
-                'type'    => 'error',
-                'message' => 'Please provide some value',
-            ]);
-        }
-    }
 }

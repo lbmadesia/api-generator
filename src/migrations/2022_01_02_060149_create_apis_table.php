@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
 
 class CreateApisTable extends Migration
@@ -17,15 +18,14 @@ class CreateApisTable extends Migration
             $table->increments('id');
             $table->string('view_permission_id', 191)->nullable();
             $table->string('name', 191)->nullable();
-            $table->string('url', 191);
+            $table->text('url')->nullable();
+            $table->text('controller_path')->nullable();
             $table->integer('created_by')->unsigned();
             $table->integer('updated_by')->unsigned()->nullable();
             $table->timestamps();
         });
-        db::table('modules')->create(['view_permission_id'=>'manage-api','name'=>'Api Management','url'=>'admin.apis.index','created_by'=>1]);
-        db::table('permissions')->create(['name'=>'manage-api','display_name'=>'Manage api Permission'])
-        ->create(['name'=>'create-api','display_name'=>'Create api Permission'])
-        ->create(['name'=>'store-api','display_name'=>'Store api Permission']);
+        db::table('modules')->insert(['view_permission_id'=>'manage-api','name'=>'Api Management','url'=>'admin.apis.index','created_by'=>1]);
+        db::table('permissions')->insert([['name'=>'manage-api','display_name'=>'Manage api Permission'],['name'=>'create-api','display_name'=>'Create api Permission'],['name'=>'store-api','display_name'=>'Store api Permission']]);
 
     }
 

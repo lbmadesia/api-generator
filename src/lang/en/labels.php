@@ -9,6 +9,7 @@ return [
 		"table" => [
 			"name" => "Api Name",
 			"url" => "Api View Route",
+			"controller_path" => "Controller Path",
 			"view_permission_id" => "View Permission",
 			"created_by" => "Created By",
 		],
@@ -33,6 +34,8 @@ return [
 			"form_file" => "Form",
 			"repo_name" => "Repository Name",
 			"event" => "Event Name",
+            "api_path"=>"Api Path",
+            "model_class"=>"Model Class",
 		],
 	]
 ];

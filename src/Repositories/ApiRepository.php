@@ -29,6 +29,7 @@ class ApiRepository extends BaseRepository
                 'apis.id',
                 'apis.name',
                 'apis.url',
+                'apis.controller_path',
                 'apis.view_permission_id',
                 'apis.created_by',
                 'apis.updated_by',
@@ -43,37 +44,20 @@ class ApiRepository extends BaseRepository
      *
      * @return bool
      */
-    public function create(array $input, array $permissions)
+    public function create(array $input)
     {
-        $api = Api::where('name', $input['name'])->first();
 
-        if (!$api) {
-            $name = $input['model_name'];
-            $model = strtolower($name);
-
-            foreach ($permissions as $permission) {
-                $perm = [
-                    'name'         => $permission,
-                    'display_name' => ucfirst(str_replace('-', ' ', $permission)).' Permission',
-                ];
-                //Creating Permission
-                $per = Permission::firstOrCreate($perm);
-            }
 
             $mod = [
-                'view_permission_id' => "view-$model-permission",
                 'name'               => $input['name'],
-                'url'                => 'admin.'. Str::plural($model).'.index',
+                'url'                => base64_encode($input['url']),
+                'controller_path'    => base64_encode($input['controller_path']),
                 'created_by'         => auth()->user()->id,
             ];
 
             $create = Api::create($mod);
-
-            return $create;
-        }
-        else {
-            return $api;
-        }
+            if($create)
+                return $create;
 
         throw new GeneralException('There was some error in creating the Api. Please Try Again.');
     }

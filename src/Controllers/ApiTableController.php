@@ -1,6 +1,6 @@
 <?php
 
-namespace Lbmadesia\Generator\Controllers;
+namespace Lbmadesia\ApiGenerator\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -19,7 +19,7 @@ class ApiTableController extends Controller
      */
     public function __construct(ApiRepository $api)
     {
-        $this->Api = $api;
+        $this->api = $api;
     }
 
     /**
@@ -31,6 +31,12 @@ class ApiTableController extends Controller
     {
         return Datatables::of($this->api->getForDataTable())
             ->escapeColumns(['name', 'url', 'view_permission_id'])
+            ->addColumn('controller_path', function ($api) {
+                return base64_decode($api->controller_path);
+            })
+            ->addColumn('url', function ($api) {
+                return base64_decode($api->url);
+            })
             ->addColumn('created_by', function ($api) {
                 return $api->created_by;
             })

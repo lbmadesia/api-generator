@@ -13,18 +13,36 @@ class ApiCrudGeneratorServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->loadViewsFrom(__DIR__.'/../views', 'generator');
+        $this->loadViewsFrom(__DIR__.'/../views', 'api-generator');
         $this->loadMigrationsFrom(__DIR__.'/../migrations');
-        $this->loadTranslationsFrom(__DIR__.'/../lang', 'generator');
-        $this->mergeConfigFrom(__DIR__ . '/../config/generator.php', 'generator');
+        $this->loadTranslationsFrom(__DIR__.'/../lang', 'api-generator');
+        $this->mergeConfigFrom(__DIR__ . '/../config/apiGenerator.php', 'api-generator');
 
         $this->publishes([
             __DIR__ . '/../config/apiGenerator.php' => config_path('apiGenerator.php'),
-        ], 'generator');
+        ], 'api-generator');
+
+        $this->publishes([
+            __DIR__ . '/../Api' => base_path('routes/Api'),
+        ], 'api-generator');
+
+        $this->publishes([
+            __DIR__ . '/../APIController.php' => base_path('app/Http/Controllers/APIController.php'),
+        ], 'api-generator');
+
+        $this->publishes([
+            __DIR__ . '/../migrations/2022_01_02_060149_create_apis_table.php' => database_path('migrations/2022_01_02_060149_create_apis_table.php'),
+        ], 'api-generator');
+
+
         $this->publishes([
             __DIR__.'/../views' => base_path('resources/views/vendor/api-generator'),
-        ]);
+        ],'api-generator');
 
+               // Load the Breadcrumbs for the package
+        if (class_exists('Breadcrumbs')) {
+            require __DIR__ . '/../breadcrumbs.php';
+        }
 
     }
 

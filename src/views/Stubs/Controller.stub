@@ -4,111 +4,78 @@ namespace DummyNamespace;
 
 use DummyModelNamespace;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use DummyRepositoryNamespace;
-use DummyManageRequestNamespace;
-use RealRashid\SweetAlert\Facades\Alert;
-@Namespaces
+use App\Http\Controllers\APIController;
+use Illuminate\Support\Facades\Validator;
+
 /**
  * DummyController
  */
-class DummyController extends Controller
+class DummyController extends APIController
 {
-    /**
-     * variable to store the repository object
-     * @var dummy_repository
-     */
-    protected $repository;
-
-    /**
-     * contructor to initialize repository object
-     * @param dummy_repository $repository;
-     */
-    public function __construct(dummy_repository $repository)
-    {
-        $this->repository = $repository;
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @param  DummyManageRequestNamespace  $request
-     * 
-     */
-    public function index(DummyManageRequest $request)
-    {
-        return view('backend.dummy_small_plural_model.index');
-    }
-    @startCreate/**
-     * Show the form for creating a new resource.
-     *
-     * @param  DummyCreateRequestNamespace  $request
-     * 
-     */
-    public function create(DummyCreateRequest $request)
-    {
-        return view('backend.dummy_small_plural_model.create');
-    }
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  DummyStoreRequestNamespace  $request
-     * 
-     */
-    public function store(DummyStoreRequest $request)
-    {
-        //Input received from the request
-        $input = $request->except(['_token']);
-        //Create the model using repository create method
-        $this->repository->create($input);
-        //return with successfull message
-        Alert::toast(trans('alerts.backend.dummy_small_plural_model.created'), 'success');
-        return redirect()->route('admin.dummy_small_plural_model.index');
-    }
 
 
-    @endCreate@startEdit/**
-     * Show the form for editing the specified resource.
-     *
-     * @param  DummyModelNamespace  $DummyArgumentName
-     * @param  DummyEditRequestNamespace  $request
-     * 
-     */
-    public function edit(DummyModel $DummyArgumentName, DummyEditRequest $request)
+    public function index(Request $request)
     {
-        return view('backend.dummy_small_plural_model.edit', compact('DummyArgumentName'));
+        $page_size = 10;
+        if(isset($request->page_size))
+            $page_size = $request->page_size;
+        $dummy_model_name = dummy_model_name::paginate($page_size);
+        return $this->respond(['data'=>$dummy_model_name]);
     }
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  DummyUpdateRequestNamespace  $request
-     * @param  DummyModelNamespace  $DummyArgumentName
-     * 
-     */
-    public function update(DummyUpdateRequest $request, DummyModel $DummyArgumentName)
+
+    public function store(Request $request)
     {
-        //Input received from the request
-        $input = $request->except(['_token']);
-        //Update the model using repository update method
-        $this->repository->update( $DummyArgumentName, $input );
-        //return with successfull message
-        Alert::toast(trans('alerts.backend.dummy_small_plural_model.updated'), 'success');
-        return redirect()->route('admin.dummy_small_plural_model.index');
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->throwValidation($validator->messages()->first());
+        }
+        $data = $request->all();
+        $dummy_model_name = dummy_model_name::create($data);
+        if($dummy_model_name)
+            return $this->respondCreatedWithData(['data'=>$dummy_model_name]);
+        else
+            return $this->setStatusCode(404)->respondWithError('Failed!');
     }
-    @endEdit@startDelete/**
-     * Remove the specified resource from storage.
-     *
-     * @param  DummyDeleteRequestNamespace  $request
-     * @param  DummyModelNamespace  $DummyArgumentName
-     * 
-     */
-    public function destroy(DummyModel $DummyArgumentName, DummyDeleteRequest $request)
+
+    public function show($id)
     {
-        //Calling the delete method on repository
-        $this->repository->delete($DummyArgumentName);
-        //returning with successfull message
-        Alert::toast(trans('alerts.backend.dummy_small_plural_model.deleted'), 'success');
-        return redirect()->route('admin.dummy_small_plural_model.index');
+        $data = $request->all();
+        $dummy_model_name = dummy_model_name::where('id',$id)->update($data);
+        if($dummy_model_name)
+            return $this->setStatusCode(200)->respond(['data'=>$dummy_model_name]);
+        else
+            return $this->setStatusCode(404)->respondWithError('Not found!');
     }
-    @endDelete
+
+    public function update(Request $request,$id)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->throwValidation($validator->messages()->first());
+        }
+
+        $data = $request->all();
+        $dummy_model_name = dummy_model_name::where('id',$id)->update($data);
+        if($dummy_model_name)
+            return $this->setStatusCode(203)->respond(['data'=>$dummy_model_name]);
+        else
+            return $this->setStatusCode(404)->respondWithError('Failed!');
+    }
+
+    public function destroy(Request $request,$id)
+    {
+
+        $dummy_model_name = dummy_model_name::where('id',$id)->delete();
+        if($dummy_model_name)
+            return $this->setStatusCode(202)->respond(['message'=>'Successful!']);
+        else
+            return $this->setStatusCode(404)->respondWithError('Failed!');
+    }
+
 }

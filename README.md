@@ -23,9 +23,9 @@ After installing the Generator, register the `Lbmadesia\ApiGenerator\Provider\Ap
 ],
 ```
 
-If you need to change what the stubs are generating for you, you can always publish the package's views files by below command:
+you need to run below command for publish migration, view and config file:
 ```
-php artisan vendor:publish --tag=apigenerator_views
+php artisan vendor:publish --tag=api-generator
 ```
 
 and you can get the title "Api Management" from package's translation file by using:

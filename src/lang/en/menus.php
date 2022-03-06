@@ -2,9 +2,9 @@
 
 return [
 	"apis" => [
-		"all" => "All apis Page",
-		"create" => "Create Api Page",
+		"all" => "All apis",
+		"create" => "Create Api",
 		"management" => "Api Management",
-		"main" => "Api Pages",
+		"main" => "Api",
 	]
 ];
