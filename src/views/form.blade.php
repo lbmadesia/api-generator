@@ -150,7 +150,7 @@
 
      function crud_api(){
         var api_path = $("#api_path").val();
-        var data = api_path+" (GET)\n"+api_path+"/{id} (GET)\n"+api_path+" (POST)\n"+api_path+"/{id} (PUT)\n"+api_path+"/{id} (DELETE)\n";
+        var data = api_path+" (GET) \n\n "+api_path+"/{id} (GET) \n "+api_path+" (POST) \n\n "+api_path+"/{id} (PUT) \n "+api_path+"/{id} (DELETE) \n ";
         $(".crud_api").val(data);
      }
  });

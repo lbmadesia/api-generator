@@ -42,8 +42,7 @@ class DummyController extends APIController
 
     public function show($id)
     {
-        $data = $request->all();
-        $dummy_model_name = dummy_model_name::where('id',$id)->update($data);
+        $dummy_model_name = dummy_model_name::where('id',$id)->first();
         if($dummy_model_name)
             return $this->setStatusCode(200)->respond(['data'=>$dummy_model_name]);
         else
