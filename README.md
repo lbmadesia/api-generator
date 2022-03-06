@@ -7,7 +7,9 @@ This api-generator is open-sourced software licensed under the MIT license
 # Official Documentation
 To get started with api-generator, use Composer to add the package to your project's dependencies:
 
-`composer require lbmadesia/api-generator`
+```
+composer require lbmadesia/api-generator
+```
 
 Since you would be having work of this api-generator, while creating your project, hence only require it in the dev environment.
 
