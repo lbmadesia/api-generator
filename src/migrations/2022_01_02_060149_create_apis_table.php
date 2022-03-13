@@ -24,9 +24,7 @@ class CreateApisTable extends Migration
             $table->integer('updated_by')->unsigned()->nullable();
             $table->timestamps();
         });
-        db::table('modules')->insert(['view_permission_id'=>'manage-api','name'=>'Api Management','url'=>'admin.apis.index','created_by'=>1]);
-        db::table('permissions')->insert([['name'=>'manage-api','display_name'=>'Manage api Permission'],['name'=>'create-api','display_name'=>'Create api Permission'],['name'=>'store-api','display_name'=>'Store api Permission']]);
-
+        
     }
 
     /**
